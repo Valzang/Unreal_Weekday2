@@ -8,6 +8,7 @@
 #include "Components/InputComponent.h"
 #include "Components/COptionComponent.h"
 #include "Components/CStatusComponent.h"
+#include "Components/CMontagesComponent.h"
 
 
 ACPlayer::ACPlayer()
@@ -16,6 +17,8 @@ ACPlayer::ACPlayer()
 
 	CHelpers::CreateComponent<USpringArmComponent>(this, &SpringArm, "SpringArm", GetMesh());
 	CHelpers::CreateComponent<UCameraComponent>(this, &Camera, "Camera", SpringArm);
+
+	CHelpers::CreateActorComponent<UCMontagesComponent>(this, &Montages, "Montages");
 	CHelpers::CreateActorComponent<UCOptionComponent>(this, &Option, "Option");
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
@@ -72,14 +75,6 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void ACPlayer::End_Roll()
-{
-}
-
-void ACPlayer::End_Backstep()
-{
-}
-
 void ACPlayer::OnMoveForward(float InAxis)
 {
 	CheckFalse(Status->CanMove());
@@ -126,11 +121,31 @@ void ACPlayer::OnAvoid()
 
 void ACPlayer::Begin_Roll()
 {
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	FVector start = GetActorLocation();
+	FVector target = start + GetVelocity().GetSafeNormal2D();
+	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
+	Montages->PlayRoll();
 }
 
 void ACPlayer::Begin_Backstep()
 {
+	bUseControllerRotationYaw = true;
+	GetCharacterMovement()->bOrientRotationToMovement = false;
+
+	Montages->PlayBackstep();
 }
+
+void ACPlayer::End_Roll()
+{
+}
+
+void ACPlayer::End_Backstep()
+{
+}
+
 
 void ACPlayer::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
 {

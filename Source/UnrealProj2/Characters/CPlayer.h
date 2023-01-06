@@ -21,19 +21,8 @@ private :
 		class UCStatusComponent* Status;
 	UPROPERTY(VisibleDefaultsOnly)
 		class UCStateComponent* State;
-
-public:
-	ACPlayer();
-
-protected:
-	virtual void BeginPlay() override;
-public:	
-	virtual void Tick(float DeltaTime) override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	void End_Roll();
-	void End_Backstep();
-
+	UPROPERTY(VisibleDefaultsOnly)
+		class UCMontagesComponent* Montages;
 
 private:
 	void OnMoveForward(float InAxis);
@@ -48,4 +37,17 @@ private:
 
 	UFUNCTION()
 		void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
+protected:
+	virtual void BeginPlay() override;
+
+public:
+	ACPlayer();
+	virtual void Tick(float DeltaTime) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void End_Roll();
+	void End_Backstep();
+
+
+
 };
