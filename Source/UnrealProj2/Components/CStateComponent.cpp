@@ -13,7 +13,6 @@ void UCStateComponent::BeginPlay()
 	
 }
 
-
 void UCStateComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -32,6 +31,16 @@ void UCStateComponent::SetRollMode()
 void UCStateComponent::SetBackstepMode()
 {
 	ChangeType(EStateType::Backstep);
+}
+
+void UCStateComponent::SetEquipMode()
+{
+	ChangeType(EStateType::Equip);
+}
+
+void UCStateComponent::SetUnequipMode()
+{
+	ChangeType(EStateType::Unequip);
 }
 
 void UCStateComponent::ChangeType(EStateType InType)
